@@ -8,17 +8,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class LagrangeInterpolation {
+public class GregoryNewtonInterpolation {
     private JPanel mainPanel;
     private JTextField textPointX;
     private JTextField textPointY;
     private JButton btnAddPoint;
     private JTable tablePoints;
-    private JButton btnCalc;
     private JTextField textXtoCalc;
+    private JButton btnCalc;
     private ArrayList<Point> points;
-    private StringBuilder lagrange = new StringBuilder();
-
+    StringBuilder newton = new StringBuilder();
     private boolean pointAlreadyExists(Point p) {
         for (Point point : points) {
             if (point.getX() == p.getX()) {
@@ -28,24 +27,41 @@ public class LagrangeInterpolation {
         return false;
     }
 
-    private double calcLagrange(double x) {
+    private double calcGregoryNewton(double x) {
         double result = 0;
 
-        for (Point point : points) {
-            double numerator = 1;
-            double denominator = 1;
-            for (Point point2 : points) {
-                if (point2.getX() != point.getX()) {
-                    numerator *= (x - point2.getX());
-                    denominator *= (point.getX() - point2.getX());
-                    System.out.println(String.format("L%.0f(x) = x - %f/%f", point.getX(), point2.getX(), denominator));
-                    lagrange.append("x - ").append(point.getX()).append("/" + point2.getY()).append(" * ").append(point.getY()).append(" + ");
-                }
-            }
-            result += (numerator / denominator) * point.getY();
+        double[] y = new double[points.size()];
+        for (int i = 0; i < points.size(); i++) {
+            y[i] = points.get(i).getY();
         }
-        lagrange = new StringBuilder(lagrange.substring(0, lagrange.length() - 3));
-        System.out.println(lagrange);
+        double[][] dividedDifferences = new double[points.size()][points.size()];
+        for (int i = 0; i < points.size(); i++) {
+            dividedDifferences[i][0] = y[i];
+        }
+        for (int i = 1; i < points.size(); i++) {
+            for (int j = 0; j < points.size() - i; j++) {
+                dividedDifferences[j][i] = (dividedDifferences[j + 1][i - 1] - dividedDifferences[j][i - 1]) / (points.get(j + i).getX() - points.get(j).getX());
+            }
+        }
+        for (int i = 0; i < points.size(); i++) {
+            double temp = dividedDifferences[0][i];
+            for (int j = 0; j < i; j++) {
+                temp *= (x - points.get(j).getX());
+            }
+            result += temp;
+        }
+        for (int i = 0; i < points.size(); i++) {
+            newton.append(dividedDifferences[0][i]);
+            for (int j = 0; j < i; j++) {
+                newton.append("(x - ").append(points.get(j).getX()).append(")");
+            }
+            if (i < points.size() - 1) {
+                newton.append(" + ");
+            }
+        }
+        System.out.println(newton);
+        System.out.println(String.format("P(%f) = %s", x, result));
+
         return result;
     }
 
@@ -69,8 +85,8 @@ public class LagrangeInterpolation {
         tablePoints.setModel(model);
     }
 
-    public LagrangeInterpolation() {
-        JFrame frame = new JFrame("Interpolação de Lagrange");
+    public GregoryNewtonInterpolation() {
+        JFrame frame = new JFrame("Interpolação de Gregory-Newton");
         frame.setSize(800, 600);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -114,14 +130,13 @@ public class LagrangeInterpolation {
             public void actionPerformed(ActionEvent e) {
                 try {
                     double x = Double.parseDouble(textXtoCalc.getText());
-                    double y = calcLagrange(x);
-                    //JOptionPane.showMessageDialog(null, "y = " + y);
-                    Result dialog = new Result(x, y, lagrange.toString());
+                    double y = calcGregoryNewton(x);
+                    Result dialog = new Result(x, y, newton.toString());
                     dialog.pack();
                     dialog.setLocationRelativeTo(null);
                     dialog.setVisible(true);
                 } catch (Exception exception) {
-                    System.out.println("Invalid input");
+                    System.out.println("Invalid input " + exception.getMessage());
                 }
             }
         });

@@ -1,7 +1,6 @@
 package view;
 
 import model.Point;
-import java.lang.Math;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -18,6 +17,7 @@ public class NewtonInterpolation {
     private JTextField textXtoCalc;
     private JButton btnCalc;
     private ArrayList<Point> points;
+    private StringBuilder newton = new StringBuilder();
     private boolean pointAlreadyExists(Point p) {
         for (Point point : points) {
             if (point.getX() == p.getX()) {
@@ -29,40 +29,34 @@ public class NewtonInterpolation {
 
     private double calcNewton(double x) {
         double result = 0;
-        StringBuilder newton = new StringBuilder();
 
         double[] y = new double[points.size()];
         for (int i = 0; i < points.size(); i++) {
             y[i] = points.get(i).getY();
         }
-
-        for (int i = 0; i < points.size() - 1; i++) {
-            for (int j = points.size() - 1; j > i; j--) {
-                y[j] = (y[j] - y[j - 1]) / (points.get(j).getX() - points.get(j - i - 1).getX());
+        double[][] dividedDifferences = new double[points.size()][points.size()];
+        for (int i = 0; i < points.size(); i++) {
+            dividedDifferences[i][0] = y[i];
+        }
+        for (int i = 1; i < points.size(); i++) {
+            for (int j = 0; j < points.size() - i; j++) {
+                dividedDifferences[j][i] = (dividedDifferences[j + 1][i - 1] - dividedDifferences[j][i - 1]) / (points.get(j + i).getX() - points.get(j).getX());
             }
         }
-
         for (int i = 0; i < points.size(); i++) {
-            double temp = y[i];
+            double temp = dividedDifferences[0][i];
             for (int j = 0; j < i; j++) {
                 temp *= (x - points.get(j).getX());
             }
             result += temp;
         }
-
         for (int i = 0; i < points.size(); i++) {
-            newton.append(y[i]);
+            newton.append(dividedDifferences[0][i]);
             for (int j = 0; j < i; j++) {
-                if (points.get(j).getX() < 0)
-                    newton.append("(x + ").append(Math.abs(points.get(j).getX())).append(")");
-                else
-                    newton.append("(x - ").append(points.get(j).getX()).append(")");
-                if(j != i - 1 && j >= 0)
-                    newton.append(" * ");
+                newton.append("(x - ").append(points.get(j).getX()).append(")");
             }
             newton.append(" + ");
         }
-
         newton = new StringBuilder(newton.substring(0, newton.length() - 3));
         System.out.println(newton);
         return result;
@@ -92,7 +86,7 @@ public class NewtonInterpolation {
         JFrame frame = new JFrame("Interpolação de Newton");
         frame.setSize(800, 600);
         frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.add(mainPanel);
 
@@ -134,7 +128,11 @@ public class NewtonInterpolation {
                 try {
                     double x = Double.parseDouble(textXtoCalc.getText());
                     double y = calcNewton(x);
-                    JOptionPane.showMessageDialog(null, "y = " + y);
+                    //JOptionPane.showMessageDialog(null, "y = " + y);
+                    Result dialog = new Result(x, y, newton.toString());
+                    dialog.pack();
+                    dialog.setLocationRelativeTo(null);
+                    dialog.setVisible(true);
                 } catch (Exception exception) {
                     System.out.println("Invalid input " + exception.getMessage());
                 }
