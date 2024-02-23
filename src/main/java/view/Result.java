@@ -30,6 +30,8 @@ public class Result extends JDialog {
     private JLabel pLabel;
     private JLabel pOfX;
     private JPanel chart;
+    private JPanel panelView = new JPanel();
+
 
     public class ModalChartComponent extends JPanel {
         private ArrayList<Point> points;
@@ -108,6 +110,7 @@ public class Result extends JDialog {
     }
 
     public Result(double x, double y, String polynomial, String title, ArrayList<Point> points) {
+        this.panelView.add(contentPane);
         this.polynomial = polynomial;
         this.pLabel.setText(polynomial);
         this.pOfX.setText(String.format("P(%.2f) = %.2f", x, y));

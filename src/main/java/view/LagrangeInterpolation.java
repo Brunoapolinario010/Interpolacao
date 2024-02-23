@@ -18,6 +18,8 @@ public class LagrangeInterpolation {
     private JTextField textXtoCalc;
     private ArrayList<Point> points;
     private StringBuilder lagrange = new StringBuilder();
+    private JPanel panelView = new JPanel();
+
 
     private boolean pointAlreadyExists(Point p) {
         for (Point point : points) {
@@ -70,6 +72,7 @@ public class LagrangeInterpolation {
     }
 
     public LagrangeInterpolation() {
+        this.panelView.add(mainPanel);
         JFrame frame = new JFrame("Interpolação de Lagrange");
         frame.setSize(800, 600);
         frame.setVisible(true);

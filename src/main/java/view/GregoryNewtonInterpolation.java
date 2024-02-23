@@ -18,6 +18,8 @@ public class GregoryNewtonInterpolation {
     private JButton btnCalc;
     private ArrayList<Point> points;
     StringBuilder newton = new StringBuilder();
+    private JPanel panelView = new JPanel();
+
     private boolean pointAlreadyExists(Point p) {
         for (Point point : points) {
             if (point.getX() == p.getX()) {
@@ -86,6 +88,7 @@ public class GregoryNewtonInterpolation {
     }
 
     public GregoryNewtonInterpolation() {
+        this.panelView.add(mainPanel);
         JFrame frame = new JFrame("Interpolação de Gregory-Newton");
         frame.setSize(800, 600);
         frame.setVisible(true);

@@ -18,6 +18,9 @@ public class NewtonInterpolation {
     private JButton btnCalc;
     private ArrayList<Point> points;
     private StringBuilder newton = new StringBuilder();
+    private JPanel panelView = new JPanel();
+
+
     private boolean pointAlreadyExists(Point p) {
         for (Point point : points) {
             if (point.getX() == p.getX()) {
@@ -83,6 +86,7 @@ public class NewtonInterpolation {
     }
 
     public NewtonInterpolation() {
+        this.panelView.add(mainPanel);
         JFrame frame = new JFrame("Interpolação de Newton");
         frame.setSize(800, 600);
         frame.setVisible(true);

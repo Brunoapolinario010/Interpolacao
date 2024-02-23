@@ -14,7 +14,6 @@ public class Menu {
         frame.setSize(400, 300);
         frame.setContentPane(mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setIconImage(icon.getImage());
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
 
