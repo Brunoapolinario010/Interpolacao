@@ -88,11 +88,11 @@ public class NewtonInterpolation {
     public NewtonInterpolation() {
         this.panelView.add(mainPanel);
         JFrame frame = new JFrame("Interpolação de Newton");
-        frame.setSize(800, 600);
+        frame.setSize(800, 700);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLocationRelativeTo(null);
-        frame.add(mainPanel);
+        frame.add(panelView);
 
         this.points = new ArrayList();
         updateTable(points);
@@ -137,6 +137,7 @@ public class NewtonInterpolation {
                     dialog.pack();
                     dialog.setLocationRelativeTo(null);
                     dialog.setVisible(true);
+                    newton.delete(0, newton.length());
                 } catch (Exception exception) {
                     System.out.println("Invalid input " + exception.getMessage());
                 }

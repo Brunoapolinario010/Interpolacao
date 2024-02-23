@@ -74,11 +74,11 @@ public class LagrangeInterpolation {
     public LagrangeInterpolation() {
         this.panelView.add(mainPanel);
         JFrame frame = new JFrame("Interpolação de Lagrange");
-        frame.setSize(800, 600);
+        frame.setSize(800, 700);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLocationRelativeTo(null);
-        frame.add(mainPanel);
+        frame.add(panelView);
 
         this.points = new ArrayList();
         updateTable(points);
@@ -104,7 +104,6 @@ public class LagrangeInterpolation {
                     points.add(p);
                     updateTable(points);
                 } catch (Exception exception) {
-
                     if(exception.getMessage() != null)
                         System.out.println(exception.getMessage());
                     else
@@ -122,6 +121,7 @@ public class LagrangeInterpolation {
                     dialog.pack();
                     dialog.setLocationRelativeTo(null);
                     dialog.setVisible(true);
+                    lagrange.delete(0, lagrange.length());
                 } catch (Exception exception) {
                     System.out.println("Invalid input");
                 }

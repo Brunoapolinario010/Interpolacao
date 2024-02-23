@@ -30,7 +30,6 @@ public class Result extends JDialog {
     private JLabel pLabel;
     private JLabel pOfX;
     private JPanel chart;
-    private JPanel panelView = new JPanel();
 
 
     public class ModalChartComponent extends JPanel {
@@ -110,7 +109,6 @@ public class Result extends JDialog {
     }
 
     public Result(double x, double y, String polynomial, String title, ArrayList<Point> points) {
-        this.panelView.add(contentPane);
         this.polynomial = polynomial;
         this.pLabel.setText(polynomial);
         this.pOfX.setText(String.format("P(%.2f) = %.2f", x, y));
@@ -119,10 +117,15 @@ public class Result extends JDialog {
         this.chart.setLayout(new BorderLayout());
         this.chart.add(smoothChart, BorderLayout.CENTER);
 
-        setContentPane(contentPane);
-        setModal(true);
+        contentPane.setLayout(new BorderLayout());
+        contentPane.add(pLabel, BorderLayout.NORTH);
+        contentPane.add(pOfX, BorderLayout.CENTER);
+        contentPane.add(chart, BorderLayout.SOUTH);
+
+        setModalityType(ModalityType.APPLICATION_MODAL);
         getRootPane().setDefaultButton(buttonOK);
 
+        setContentPane(contentPane);
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onOK();
