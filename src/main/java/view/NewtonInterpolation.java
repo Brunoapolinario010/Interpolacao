@@ -129,7 +129,7 @@ public class NewtonInterpolation {
                     double x = Double.parseDouble(textXtoCalc.getText());
                     double y = calcNewton(x);
                     //JOptionPane.showMessageDialog(null, "y = " + y);
-                    Result dialog = new Result(x, y, newton.toString());
+                    Result dialog = new Result(x, y, newton.toString(), "Interpolação de Newton", points);
                     dialog.pack();
                     dialog.setLocationRelativeTo(null);
                     dialog.setVisible(true);

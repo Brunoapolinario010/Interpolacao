@@ -131,7 +131,7 @@ public class GregoryNewtonInterpolation {
                 try {
                     double x = Double.parseDouble(textXtoCalc.getText());
                     double y = calcGregoryNewton(x);
-                    Result dialog = new Result(x, y, newton.toString());
+                    Result dialog = new Result(x, y, newton.toString(), "Interpolação de Gregory-Newton", points);
                     dialog.pack();
                     dialog.setLocationRelativeTo(null);
                     dialog.setVisible(true);

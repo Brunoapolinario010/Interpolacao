@@ -115,8 +115,7 @@ public class LagrangeInterpolation {
                 try {
                     double x = Double.parseDouble(textXtoCalc.getText());
                     double y = calcLagrange(x);
-                    //JOptionPane.showMessageDialog(null, "y = " + y);
-                    Result dialog = new Result(x, y, lagrange.toString());
+                    Result dialog = new Result(x, y, lagrange.toString(), "Interpolação de Lagrange", points);
                     dialog.pack();
                     dialog.setLocationRelativeTo(null);
                     dialog.setVisible(true);
